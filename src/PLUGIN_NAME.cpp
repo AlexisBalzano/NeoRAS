@@ -136,5 +136,5 @@ void PLUGIN_NAME::OnTimer(int Counter) {
 
 PluginSDK::PluginMetadata NeoVSID::GetMetadata() const
 {
-    return {"NeoVSID", PLUGIN_VERSION, "French VACC"};
+    return {"NeoVSID", PLUGIN_VERSION, "PLUGIN_AUTHOR"};
 }
