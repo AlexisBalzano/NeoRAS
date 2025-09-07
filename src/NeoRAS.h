@@ -54,7 +54,15 @@ namespace ras {
 
     public:
         // Command IDs
+        std::string helpCommandId_;
         std::string versionCommandId_;
+        std::string assignCommandId_;
+        std::string assignGroupCommandId_;
+        std::string unassignCommandId_;
+        std::string unassignGroupCommandId_;
+        std::string includeCommandId_;
+        std::string excludeCommandId_;
+        std::string resetCommandId_;
 
     private:
         // Plugin state

@@ -18,6 +18,11 @@ public:
 	static std::filesystem::path getDllDirectory();
 	void DisplayMessageFromDataManager(const std::string& message, const std::string& sender = "");
 
+	void getActiveAirports(const std::string& positionIdent);
+	void getMetar(const std::string& oaci); // Change return type accordingly
+	void assignRunways(const std::string& oaci);
+	void activateAirports(const std::string& oaci);
+
 private:
 	Aircraft::AircraftAPI* aircraftAPI_ = nullptr;
 	Flightplan::FlightplanAPI* flightplanAPI_ = nullptr;
