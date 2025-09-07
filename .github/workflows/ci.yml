@@ -129,8 +129,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NeoVSID-${{ matrix.platform }}-${{ matrix.architecture }}
+          name: NeoRAS-${{ matrix.platform }}-${{ matrix.architecture }}
           path: |
-            lib/NeoVSID*
-            bin/NeoVSID*
-            bin/${{ env.build_type }}/NeoVSID*
+            lib/NeoRAS*
+            bin/NeoRAS*
+            bin/${{ env.build_type }}/NeoRAS*
