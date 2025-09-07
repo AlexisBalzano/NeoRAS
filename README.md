@@ -1,9 +1,9 @@
-# PLUGIN_NAME_
-PLUGIN_DESCRIPTION_ for *NeoRadar* ATC Client <br>
-<br>
+# NeoRAS
+Automatic Runway Assignement for *NeoRadar* ATC Client <br>
 
 # Installation
-PLUGIN_INSTALLATION_INSTRUCTIONS
+- Drop `NeoRAS[.dll/.so/.dylib]` in `Documents/NeoRadar/plugins`.
+- Load the plugin from within NeoRadar UI.
 
 # Usage
 PLUGIN_USAGE_INSTRUCTIONS
