@@ -1,10 +1,10 @@
-#include "PLUGIN_NAME.h"
+#include "NeoRAS.h"
 
 extern "C" PLUGIN_API PluginSDK::BasePlugin *CreatePluginInstance()
 {
     try
     {
-        return new PLUGIN_NAMESPACE::PLUGIN_NAME();
+        return new ras::NeoRAS();
     }
     catch (const std::exception &e)
     {

@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <fstream>
 
-#include "../PLUGIN_NAME.h"
+#include "../NeoRAS.h"
 #include "DataManager.h"
 
 #if defined(_WIN32)
@@ -19,14 +19,14 @@
 #define LOG_DEBUG(loglevel, message) void(0)
 #endif
 
-DataManager::DataManager(PLUGIN_NAMESPACE::PLUGIN_NAME* PLUGIN_NAME)
-	: PLUGIN_NAME_(PLUGIN_NAME) {
-	aircraftAPI_ = PLUGIN_NAME_->GetAircraftAPI();
-	flightplanAPI_ = PLUGIN_NAME_->GetFlightplanAPI();
-	airportAPI_ = PLUGIN_NAME_->GetAirportAPI();
-	chatAPI_ = PLUGIN_NAME_->GetChatAPI();
-	loggerAPI_ = PLUGIN_NAME_->GetLogger();
-	controllerDataAPI_ = PLUGIN_NAME->GetControllerDataAPI();
+DataManager::DataManager(ras::NeoRAS* neoRAS)
+	: neoRAS_(neoRAS) {
+	aircraftAPI_ = neoRAS_->GetAircraftAPI();
+	flightplanAPI_ = neoRAS_->GetFlightplanAPI();
+	airportAPI_ = neoRAS_->GetAirportAPI();
+	chatAPI_ = neoRAS_->GetChatAPI();
+	loggerAPI_ = neoRAS_->GetLogger();
+	controllerDataAPI_ = neoRAS_->GetControllerDataAPI();
 
 	configPath_ = getDllDirectory();
 }
@@ -75,69 +75,9 @@ void DataManager::clearJson()
 void DataManager::DisplayMessageFromDataManager(const std::string& message, const std::string& sender)
 {
 	Chat::ClientTextMessageEvent textMessage;
-	textMessage.sentFrom = "PLUGIN_NAME";
+	textMessage.sentFrom = "NeoRAS";
 	(sender.empty()) ? textMessage.message = ": " + message : textMessage.message = sender + ": " + message;
 	textMessage.useDedicatedChannel = true;
 
 	chatAPI_->sendClientMessage(textMessage);
-}
-
-	
-int DataManager::retrieveConfigJson(const std::string& oaci)
-{
-	std::lock_guard<std::mutex> lock(dataMutex_);
-	std::string fileName = oaci + ".json";
-	std::filesystem::path jsonPath = configPath_ / "PLUGIN_NAME" / fileName;
-
-	std::ifstream config(jsonPath);
-	if (!config.is_open()) {
-		DisplayMessageFromDataManager("Could not open JSON file: " + jsonPath.string(), "DataManager");
-		loggerAPI_->log(Logger::LogLevel::Error, "Could not open JSON file: " + jsonPath.string());
-		return -1;
-	}
-
-	try {
-		config >> configJson_;
-		if (configJson_.contains("version")) {
-			if (!isCorrectJsonVersion(configJson_["version"].get<std::string>(), fileName)) {
-				configJson_.clear();
-				return -1;
-			}
-		}
-		else {
-			if (!configsError.contains(oaci)) {
-				configsError.insert(oaci);
-				DisplayMessageFromDataManager("Config version missing in JSON file: " + fileName, "DataManager");
-			}
-		}
-	}
-	catch (...) {
-		DisplayMessageFromDataManager("Error parsing JSON file: " + jsonPath.string(), "DataManager");
-		loggerAPI_->log(Logger::LogLevel::Error, "Error parsing JSON file: " + jsonPath.string());
-		return -1;
-	}
-	
-	return 0;
-}
-
-bool DataManager::retrieveCorrectConfigJson(const std::string& oaci)
-{
-	if (!configJson_.contains(oaci) || configJson_.empty()) {
-		if (retrieveConfigJson(oaci) == -1) return false;
-	}
-	return true;
-}
-
-bool DataManager::isCorrectJsonVersion(const std::string& config_version, const std::string& fileName)
-{
-	if (config_version == NEOVSID_VERSION) {
-		return true;
-	}
-	else {
-		if (configsError.contains(fileName)) return false; // Avoid spamming messages for the same file
-		configsError.insert(fileName);
-		DisplayMessageFromDataManager("Config version mismatch! Expected: " + std::string(NEOVSID_VERSION) + ", Found: " + config_version + ", please update your config files.", fileName);
-		loggerAPI_->log(Logger::LogLevel::Error, "Config version mismatch! Expected: " + std::string(NEOVSID_VERSION) + ", Found: " + config_version + fileName);
-	}
-	return false;
 }

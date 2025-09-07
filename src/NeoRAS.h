@@ -4,22 +4,22 @@
 #include <vector>
 
 #include "NeoRadarSDK/SDK.h"
-#include "core/PLUGIN_NAMECommandProvider.h"
+#include "core/NeoRASCommandProvider.h"
 #include "core/DataManager.h"
 
-constexpr const char* PLUGIN_NAME_VERSION = "v0.0.1";
+constexpr const char* NEORAS_VERSION = "v0.0.1";
 
 using namespace PluginSDK;
 
-namespace PLUGIN_NAMESPACE {
+namespace ras {
 
-    class PLUGIN_NAMECommandProvider;
+    class NeoRASCommandProvider;
 
-    class PLUGIN_NAME : public BasePlugin
+    class NeoRAS : public BasePlugin
     {
     public:
-        PLUGIN_NAME();
-        ~PLUGIN_NAME();
+        NeoRAS();
+        ~NeoRAS();
 
 		// Plugin lifecycle methods
         void Initialize(const PluginMetadata& metadata, CoreAPI* coreAPI, ClientInformation info) override;
@@ -54,7 +54,7 @@ namespace PLUGIN_NAMESPACE {
 
     public:
         // Command IDs
-        std::string commandId_;
+        std::string versionCommandId_;
 
     private:
         // Plugin state
@@ -74,7 +74,7 @@ namespace PLUGIN_NAMESPACE {
         PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
         Tag::TagInterface* tagInterface_ = nullptr;
         std::unique_ptr<DataManager> dataManager_;
-        std::shared_ptr<NeoVSIDCommandProvider> CommandProvider_;
+        std::shared_ptr<NeoRASCommandProvider> CommandProvider_;
 
         // Tag Items
         void RegisterTagItems();
@@ -83,13 +83,14 @@ namespace PLUGIN_NAMESPACE {
         void unegisterCommand();
         void OnTagAction(const Tag::TagActionEvent* event) override;
         void OnTagDropdownAction(const Tag::DropdownActionEvent* event) override;
-        void UpdateTagItems();
-        void UpdateTagItems(std::string Callsign);
 
 	    // TAG Items IDs
 		std::string tagItemId_;
 
         // TAG Action IDs
         std::string tagActionId_;
+
+		// TAG Menu IDs
+        std::string tagMenuId_;
     };
-} // namespace PLUGIN_NAMESPACE
+} // namespace ras

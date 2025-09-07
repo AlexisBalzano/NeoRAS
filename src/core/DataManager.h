@@ -9,7 +9,7 @@ using namespace PluginSDK;
 
 class DataManager {
 public:
-	DataManager(PLUGIN_NAMESPACE::PLUGIN_NAME* PLUGIN_NAME);
+	DataManager(ras::NeoRAS* neoRAS);
 	~DataManager() = default;
 
 	void clearData();
@@ -17,9 +17,6 @@ public:
 
 	static std::filesystem::path getDllDirectory();
 	void DisplayMessageFromDataManager(const std::string& message, const std::string& sender = "");
-	int retrieveConfigJson(const std::string& oaci);
-	bool retrieveCorrectConfigJson(const std::string& oaci);
-	bool isCorrectJsonVersion(const std::string& config_version, const std::string& fileName);
 
 private:
 	Aircraft::AircraftAPI* aircraftAPI_ = nullptr;
@@ -27,7 +24,7 @@ private:
 	Airport::AirportAPI* airportAPI_ = nullptr;
 	PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
 	Chat::ChatAPI* chatAPI_ = nullptr;
-	PLUGIN_NAMESPACE::PLUGIN_NAME* PLUGIN_NAME_ = nullptr;
+	ras::NeoRAS* neoRAS_ = nullptr;
 	PluginSDK::Logger::LoggerAPI* loggerAPI_ = nullptr;
 
 	std::filesystem::path configPath_;
