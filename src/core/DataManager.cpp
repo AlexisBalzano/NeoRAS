@@ -28,7 +28,6 @@ DataManager::DataManager(ras::NeoRAS* neoRAS)
 std::filesystem::path DataManager::getDllDirectory()
 {
 	std::filesystem::path documentsPath = neoRAS_->GetClientInformation().documentsPath;
-	DisplayMessageFromDataManager("Documents path: " + documentsPath.string());
 	return documentsPath / "/plugins";
 }
 
@@ -60,9 +59,10 @@ void DataManager::DisplayMessageFromDataManager(const std::string& message, cons
 	chatAPI_->sendClientMessage(textMessage);
 }
 
-void DataManager::getActiveAirports(const std::string& positionIdent)
+std::vector<std::string> DataManager::getActiveAirports(const std::string& positionIdent)
 {
 	// Need to get the "active" array from ATC-Data.json found in the loaded package
+	return std::vector<std::string>();
 }
 
 std::string DataManager::getMetar(const std::string& oaci)
@@ -114,5 +114,33 @@ ras::WindData DataManager::parseMetar(const std::string& metar)
 bool DataManager::activateAirport(std::string oaci)
 {
 	std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
-	return airportAPI_->setAirportStatus(oaci, Airport::AirportStatus::Active);
+	
+	std::optional<Fsd::ConnectionInfo> self = fsdAPI_->getConnection();
+	if (!self.has_value()) return false;
+	
+	Controller::FacilityType selfFacility;
+	if (self->facility <= Fsd::NetworkFacility::APP) {
+		if (self->facility == Fsd::NetworkFacility::OBS) {
+			selfFacility = Controller::FacilityType::APP; // DEBUG
+		}
+		else {
+		 selfFacility = static_cast<Controller::FacilityType>(self->facility);
+		}
+	}
+	else {
+		selfFacility = Controller::FacilityType::CTR;
+	}
+	
+	bool atcBelow = false;
+	std::vector<PluginSDK::Controller::Controller> controllers = controllerAPI_->getAll();
+	for (const auto& controller : controllers) {
+		if (!controller.isATC) continue;
+		if (controller.callsign.substr(0, 4) != oaci) continue;
+		if (controller.facility < selfFacility) {
+			atcBelow = true;
+			break;
+		}
+	}
+	Airport::AirportStatus status = atcBelow ? Airport::AirportStatus::Observed : Airport::AirportStatus::Active;
+	return airportAPI_->setAirportStatus(oaci, status);
 }

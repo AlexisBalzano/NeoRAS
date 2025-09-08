@@ -48,7 +48,6 @@ namespace ras {
         Fsd::FsdAPI* GetFsdAPI() const { return fsdAPI_; }
         ControllerData::ControllerDataAPI* GetControllerDataAPI() const { return controllerDataAPI_; }
 		Controller::ControllerAPI* GetControllerAPI() const { return controllerAPI_; }
-		Fsd::FsdAPI* GetFsdAPI() const { return fsdAPI_; }
 		Tag::TagInterface* GetTagInterface() const { return tagInterface_; }
         DataManager* GetDataManager() const { return dataManager_.get(); }
 
@@ -85,7 +84,6 @@ namespace ras {
         Logger::LoggerAPI* logger_ = nullptr;
         ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
 		Controller::ControllerAPI* controllerAPI_ = nullptr;
-		Fsd::FsdAPI* fsdAPI_ = nullptr;
         Tag::TagInterface* tagInterface_ = nullptr;
         std::unique_ptr<DataManager> dataManager_;
         std::shared_ptr<NeoRASCommandProvider> CommandProvider_;

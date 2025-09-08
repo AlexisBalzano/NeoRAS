@@ -31,7 +31,6 @@ void NeoRAS::Initialize(const PluginMetadata &metadata, CoreAPI *coreAPI, Client
     fsdAPI_ = &lcoreAPI->fsd();
     controllerDataAPI_ = &lcoreAPI->controllerData();
 	controllerAPI_ = &lcoreAPI->controller();
-	fsdAPI_ = &lcoreAPI->fsd();
     logger_ = &lcoreAPI->logger();
     tagInterface_ = lcoreAPI->tag().getInterface();
 	dataManager_ = std::make_unique<DataManager>(this);
