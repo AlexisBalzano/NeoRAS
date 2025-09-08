@@ -126,6 +126,11 @@ Chat::CommandResult NeoRASCommandProvider::Execute( const std::string &commandId
 
         return { true, std::nullopt };
     }
+    else if (commandId == neoRAS_->assignCommandId_) {
+		std::string metar = neoRAS_->GetDataManager()->getMetar(args[0]);
+		neoRAS_->DisplayMessage(metar, "METAR");
+		return { true, std::nullopt };
+    }
 	// Additional command handling can be added here
     else {
         return { false, "error"};

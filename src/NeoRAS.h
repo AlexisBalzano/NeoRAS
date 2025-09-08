@@ -6,6 +6,7 @@
 #include "NeoRadarSDK/SDK.h"
 #include "core/NeoRASCommandProvider.h"
 #include "core/DataManager.h"
+#include "../External/httplib/httplib.h"
 
 constexpr const char* NEORAS_VERSION = "v0.0.1";
 

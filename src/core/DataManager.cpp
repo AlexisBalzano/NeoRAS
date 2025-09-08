@@ -81,3 +81,26 @@ void DataManager::DisplayMessageFromDataManager(const std::string& message, cons
 
 	chatAPI_->sendClientMessage(textMessage);
 }
+
+std::string DataManager::getMetar(const std::string& oaci)
+{
+	httplib::Client cli("https://metar.vatsim.net");
+	httplib::Headers headers = { {"User-Agent", "NeoRAS-plugin"} };
+	std::string apiEndpoint = "/" + oaci;
+
+	auto res = cli.Get(apiEndpoint.c_str(), headers);
+	if (res && res->status != 200) {
+		std::string errorMsg = "Error fetching METAR for " + oaci + ": HTTP " + std::to_string(res->status);
+		LOG_DEBUG(PluginSDK::Logger::LogLevel::Error, errorMsg);
+		return errorMsg;
+	}
+	else if (res && res->status == 200) {
+		LOG_DEBUG(PluginSDK::Logger::LogLevel::Info, "Successfully fetched METAR for " + oaci);
+		return res->body;
+	}
+	else {
+		std::string errorMsg = "Error fetching METAR for " + oaci + ": No response from server";
+		LOG_DEBUG(PluginSDK::Logger::LogLevel::Error, errorMsg);
+		return errorMsg;
+	}
+}
