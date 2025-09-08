@@ -67,6 +67,11 @@ void DataManager::DisplayMessageFromDataManager(const std::string& message, cons
 	chatAPI_->sendClientMessage(textMessage);
 }
 
+void DataManager::getActiveAirports(const std::string& positionIdent)
+{
+	// Need to get the "active" array from ATC-Data.json found in the loaded package
+}
+
 std::string DataManager::getMetar(const std::string& oaci)
 {
 	httplib::Client cli("https://metar.vatsim.net");
@@ -88,4 +93,33 @@ std::string DataManager::getMetar(const std::string& oaci)
 		LOG_DEBUG(PluginSDK::Logger::LogLevel::Error, errorMsg);
 		return errorMsg;
 	}
+}
+
+ras::WindData DataManager::parseMetar(const std::string& metar)
+{
+	// Extract wind information from the METAR string 00000KT + if Variable + gusts
+	ras::WindData windData = { 0, {0, 0}, 0};
+	auto it = metar.find("KT");
+	if (it != std::string::npos) {
+		std::string windSegment = metar.substr(0, it);
+		size_t pos = windSegment.find_last_of(' ');
+		if (pos != std::string::npos) {
+			windSegment = windSegment.substr(pos + 1);
+		}
+		if (windSegment.length() >= 5) {
+			windData.windDirection = std::stoi(windSegment.substr(0, 3));
+			windData.windSpeed = std::stoi(windSegment.substr(3, 2));
+			size_t gustPos = windSegment.find("G");
+			if (gustPos != std::string::npos && gustPos + 2 < windSegment.length()) {
+				windData.windGust = std::stoi(windSegment.substr(gustPos + 1, 2));
+			}
+		}
+	}
+	return windData;
+}
+
+bool DataManager::activateAirport(std::string oaci)
+{
+	std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
+	return airportAPI_->setAirportStatus(oaci, Airport::AirportStatus::Active);
 }

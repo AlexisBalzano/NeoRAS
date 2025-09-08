@@ -128,7 +128,14 @@ Chat::CommandResult NeoRASCommandProvider::Execute( const std::string &commandId
     }
     else if (commandId == neoRAS_->assignCommandId_) {
 		std::string metar = neoRAS_->GetDataManager()->getMetar(args[0]);
-		neoRAS_->DisplayMessage(metar, "METAR");
+		std::string message = neoRAS_->GetDataManager()->parseMetar(metar).toString();
+		neoRAS_->DisplayMessage(message, "METAR");
+		return { true, std::nullopt };
+    }
+    else if (commandId == neoRAS_->includeCommandId_) {
+        bool success = neoRAS_->GetDataManager()->activateAirport(args[0]);
+		std::string message = success ? "Airport " + args[0] + " included in auto runway assignment." : "Failed to include airport " + args[0] + ".";
+		neoRAS_->DisplayMessage(message);
 		return { true, std::nullopt };
     }
 	// Additional command handling can be added here
