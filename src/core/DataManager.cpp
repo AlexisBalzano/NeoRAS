@@ -4,15 +4,6 @@
 #include "../NeoRAS.h"
 #include "DataManager.h"
 
-#if defined(_WIN32)
-#include <Windows.h>
-#include <shlobj.h>
-#include <knownfolders.h>
-#elif defined(__APPLE__) || defined(__linux__)
-#include <dlfcn.h>
-#include <cstdlib>
-#endif
-
 #ifdef DEV
 #define LOG_DEBUG(loglevel, message) loggerAPI_->log(loglevel, message)
 #else
@@ -27,6 +18,8 @@ DataManager::DataManager(ras::NeoRAS* neoRAS)
 	chatAPI_ = neoRAS_->GetChatAPI();
 	loggerAPI_ = neoRAS_->GetLogger();
 	controllerDataAPI_ = neoRAS_->GetControllerDataAPI();
+	controllerAPI_ = neoRAS_->GetControllerAPI();
+	fsdAPI_ = neoRAS_->GetFsdAPI();
 
 	configPath_ = getDllDirectory();
 }

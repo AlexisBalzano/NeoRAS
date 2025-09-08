@@ -40,13 +40,15 @@ namespace ras {
         void TagProcessing(const std::string& callsign, const std::string& actionId, const std::string& userInput = "");
 
 		// API Accessors
-        PluginSDK::Logger::LoggerAPI* GetLogger() const { return logger_; }
+        Logger::LoggerAPI* GetLogger() const { return logger_; }
         Aircraft::AircraftAPI* GetAircraftAPI() const { return aircraftAPI_; }
         Airport::AirportAPI* GetAirportAPI() const { return airportAPI_; }
         Chat::ChatAPI* GetChatAPI() const { return chatAPI_; }
         Flightplan::FlightplanAPI* GetFlightplanAPI() const { return flightplanAPI_; }
         Fsd::FsdAPI* GetFsdAPI() const { return fsdAPI_; }
-        PluginSDK::ControllerData::ControllerDataAPI* GetControllerDataAPI() const { return controllerDataAPI_; }
+        ControllerData::ControllerDataAPI* GetControllerDataAPI() const { return controllerDataAPI_; }
+		Controller::ControllerAPI* GetControllerAPI() const { return controllerAPI_; }
+		Fsd::FsdAPI* GetFsdAPI() const { return fsdAPI_; }
 		Tag::TagInterface* GetTagInterface() const { return tagInterface_; }
         DataManager* GetDataManager() const { return dataManager_.get(); }
 
@@ -80,8 +82,10 @@ namespace ras {
         Chat::ChatAPI* chatAPI_ = nullptr;
         Flightplan::FlightplanAPI* flightplanAPI_ = nullptr;
         Fsd::FsdAPI* fsdAPI_ = nullptr;
-        PluginSDK::Logger::LoggerAPI* logger_ = nullptr;
-        PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
+        Logger::LoggerAPI* logger_ = nullptr;
+        ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
+		Controller::ControllerAPI* controllerAPI_ = nullptr;
+		Fsd::FsdAPI* fsdAPI_ = nullptr;
         Tag::TagInterface* tagInterface_ = nullptr;
         std::unique_ptr<DataManager> dataManager_;
         std::shared_ptr<NeoRASCommandProvider> CommandProvider_;

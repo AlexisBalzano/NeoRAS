@@ -34,20 +34,22 @@ public:
 	std::filesystem::path getDllDirectory();
 	void DisplayMessageFromDataManager(const std::string& message, const std::string& sender = "");
 
-	void getActiveAirports(const std::string& positionIdent);
+	std::vector<std::string> getActiveAirports(const std::string& positionIdent);
 	std::string getMetar(const std::string& oaci);
 	ras::WindData parseMetar(const std::string& metar);
-	void assignRunways(const std::string& oaci);
+	bool assignRunways(const std::string& oaci);
 	bool activateAirport(std::string oaci);
 
 private:
 	Aircraft::AircraftAPI* aircraftAPI_ = nullptr;
 	Flightplan::FlightplanAPI* flightplanAPI_ = nullptr;
 	Airport::AirportAPI* airportAPI_ = nullptr;
-	PluginSDK::ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
+	ControllerData::ControllerDataAPI* controllerDataAPI_ = nullptr;
+	Controller::ControllerAPI* controllerAPI_ = nullptr;
+	Fsd::FsdAPI* fsdAPI_ = nullptr;
 	Chat::ChatAPI* chatAPI_ = nullptr;
+	Logger::LoggerAPI* loggerAPI_ = nullptr;
 	ras::NeoRAS* neoRAS_ = nullptr;
-	PluginSDK::Logger::LoggerAPI* loggerAPI_ = nullptr;
 
 	std::filesystem::path configPath_;
 	nlohmann::ordered_json configJson_;
