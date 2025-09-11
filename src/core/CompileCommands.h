@@ -96,7 +96,6 @@ inline void NeoRAS::unegisterCommand()
         chatAPI_->unregisterCommand(unsetCommandId_);
         chatAPI_->unregisterCommand(includeCommandId_);
         chatAPI_->unregisterCommand(excludeCommandId_);
-        chatAPI_->unregisterCommand(resetCommandId_);
 
         CommandProvider_.reset();
 	}

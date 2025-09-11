@@ -65,7 +65,6 @@ namespace ras {
         std::string unsetCommandId_;
         std::string includeCommandId_;
         std::string excludeCommandId_;
-        std::string resetCommandId_;
 
     private:
         // Plugin state
