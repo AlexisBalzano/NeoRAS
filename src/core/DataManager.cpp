@@ -130,12 +130,7 @@ bool DataManager::activateAirport(std::string oaci)
 	
 	Controller::FacilityType selfFacility;
 	if (self->facility <= Fsd::NetworkFacility::APP) {
-		if (self->facility == Fsd::NetworkFacility::OBS) {
-			selfFacility = Controller::FacilityType::APP; // DEBUG
-		}
-		else {
-		 selfFacility = static_cast<Controller::FacilityType>(self->facility);
-		}
+		selfFacility = static_cast<Controller::FacilityType>(self->facility);
 	}
 	else {
 		selfFacility = Controller::FacilityType::CTR;
