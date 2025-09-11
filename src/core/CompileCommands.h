@@ -128,16 +128,36 @@ Chat::CommandResult NeoRASCommandProvider::Execute( const std::string &commandId
         return { true, std::nullopt };
     }
     else if (commandId == neoRAS_->assignCommandId_) {
-		std::string metar = neoRAS_->GetDataManager()->getMetar(args[0]);
+        std::string oaci = args[0];
+        std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
+		std::string metar = neoRAS_->GetDataManager()->getMetar(oaci);
 		std::string message = neoRAS_->GetDataManager()->parseMetar(metar).toString();
 		neoRAS_->DisplayMessage(message, "METAR");
 		return { true, std::nullopt };
     }
     else if (commandId == neoRAS_->includeCommandId_) {
-        bool success = neoRAS_->GetDataManager()->activateAirport(args[0]);
-		std::string message = success ? "Airport " + args[0] + " included in auto runway assignment." : "Failed to include airport " + args[0] + ".";
+        std::string oaci = args[0];
+        std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
+        bool success = neoRAS_->GetDataManager()->activateAirport(oaci);
+		std::string message = success ? "Airport " + oaci + " included in auto runway assignment." : "Failed to include airport " + oaci + ".";
 		neoRAS_->DisplayMessage(message);
 		return { true, std::nullopt };
+    }
+    else if (commandId == neoRAS_->excludeCommandId_) {
+        std::string oaci = args[0];
+        std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
+		bool success = neoRAS_->GetDataManager()->deactivateAirport(oaci);
+        std::string message = success ? "Airport " + oaci + " excluded from auto runway assignment." : "Failed to exclude airport " + oaci + ".";
+		neoRAS_->DisplayMessage(message);
+		return { true, std::nullopt };
+    }
+    else if (commandId == neoRAS_->unassignCommandId_) {
+        std::string oaci = args[0];
+        std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
+        bool success = neoRAS_->GetDataManager()->deleteRunways(oaci);
+        std::string message = success ? "Unassigned " + oaci + " runways." : "Couldn't unassign runways of " + oaci + ".";
+        neoRAS_->DisplayMessage(message);
+        return { true, std::nullopt };
     }
 	// Additional command handling can be added here
     else {

@@ -38,7 +38,9 @@ public:
 	std::string getMetar(const std::string& oaci);
 	ras::WindData parseMetar(const std::string& metar);
 	bool assignRunways(const std::string& oaci);
+	bool deleteRunways(const std::string& oaci);
 	bool activateAirport(std::string oaci);
+	bool deactivateAirport(std::string oaci);
 
 private:
 	Aircraft::AircraftAPI* aircraftAPI_ = nullptr;

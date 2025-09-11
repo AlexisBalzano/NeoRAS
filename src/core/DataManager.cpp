@@ -111,6 +111,12 @@ ras::WindData DataManager::parseMetar(const std::string& metar)
 	return windData;
 }
 
+bool DataManager::deleteRunways(const std::string& oaci)
+{
+	airportAPI_->deleteAirport(oaci);
+	return activateAirport(oaci);;
+}
+
 bool DataManager::activateAirport(std::string oaci)
 {
 	std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
@@ -143,4 +149,10 @@ bool DataManager::activateAirport(std::string oaci)
 	}
 	Airport::AirportStatus status = atcBelow ? Airport::AirportStatus::Observed : Airport::AirportStatus::Active;
 	return airportAPI_->setAirportStatus(oaci, status);
+}
+
+bool DataManager::deactivateAirport(std::string oaci)
+{
+	std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
+	return airportAPI_->deleteAirport(oaci);
 }
