@@ -158,6 +158,19 @@ Chat::CommandResult NeoRASCommandProvider::Execute( const std::string &commandId
         neoRAS_->DisplayMessage(message);
         return { true, std::nullopt };
     }
+    else if (commandId == neoRAS_->setupCommandId_) {
+        std::string atcIdent = args.size() > 0 ? args[0] : "";
+        bool success = neoRAS_->GetDataManager()->setupRunways(atcIdent);
+        std::string message = success ? "Runways setup completed." : "Couldn't setup runways.";
+        neoRAS_->DisplayMessage(message);
+        return { true, std::nullopt };
+    }
+    else if (commandId == neoRAS_->unsetCommandId_) {
+        bool success = neoRAS_->GetDataManager()->unsetAllRunways();
+        std::string message = success ? "All runways unassigned." : "Couldn't unassign all runways.";
+        neoRAS_->DisplayMessage(message);
+        return { true, std::nullopt };
+	}
 	// Additional command handling can be added here
     else {
         return { false, "error"};

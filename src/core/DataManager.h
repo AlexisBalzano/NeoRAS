@@ -41,6 +41,8 @@ public:
 	bool deleteRunways(const std::string& oaci);
 	bool activateAirport(std::string oaci);
 	bool deactivateAirport(std::string oaci);
+	bool setupRunways(const std::string& positionIdent);
+	bool unsetAllRunways();
 
 private:
 	Aircraft::AircraftAPI* aircraftAPI_ = nullptr;

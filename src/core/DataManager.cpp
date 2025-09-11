@@ -113,6 +113,10 @@ ras::WindData DataManager::parseMetar(const std::string& metar)
 
 bool DataManager::deleteRunways(const std::string& oaci)
 {
+	std::optional<Airport::AirportConfig> airport = airportAPI_->getConfigurationByIcao(oaci);
+	if (!airport.has_value()) {
+		return false;
+	}
 	airportAPI_->deleteAirport(oaci);
 	return activateAirport(oaci);;
 }
@@ -155,4 +159,24 @@ bool DataManager::deactivateAirport(std::string oaci)
 {
 	std::transform(oaci.begin(), oaci.end(), oaci.begin(), ::toupper);
 	return airportAPI_->deleteAirport(oaci);
+}
+
+bool DataManager::setupRunways(const std::string& positionIdent)
+{
+	// If positionIdent is empty, get own callsign from FSD connection
+	return false;
+}
+
+bool DataManager::unsetAllRunways()
+{
+	// blocked by rate limit
+	bool success = true;
+	std::vector<Airport::AirportConfig> airportsToClear = airportAPI_->getConfigurations();
+
+	for (const auto& airport : airportsToClear) {
+		if (!airportAPI_->deleteAirport(airport.icao))
+			success = false;
+	}
+
+	return success;
 }
