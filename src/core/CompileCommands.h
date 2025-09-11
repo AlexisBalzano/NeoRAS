@@ -58,7 +58,7 @@ void NeoRAS::RegisterCommand() {
 
         excludeCommandId_ = chatAPI_->registerCommand(definition.name, definition, CommandProvider_);
 
-        definition.name = "ras assign";
+        definition.name = "ras setup";
         definition.description = "Assign runways for given ATC Position";
         definition.lastParameterHasSpaces = false;
         definition.parameters.clear();
@@ -66,16 +66,17 @@ void NeoRAS::RegisterCommand() {
         PluginSDK::Chat::CommandParameter atcIdent;
         icao.name = "ATCident";
         icao.type = PluginSDK::Chat::ParameterType::String;
-        icao.required = true;
+        icao.required = false;
         definition.parameters.push_back(atcIdent);
 
-        assignGroupCommandId_ = chatAPI_->registerCommand(definition.name, definition, CommandProvider_);
+        setupCommandId_ = chatAPI_->registerCommand(definition.name, definition, CommandProvider_);
 
-        definition.name = "ras unassign";
-        definition.description = "Unassign runways for given ATC Position";
+        definition.parameters.clear();
+        definition.name = "ras unset";
+        definition.description = "Unassign all runways";
         definition.lastParameterHasSpaces = false;
 
-        unassignGroupCommandId_ = chatAPI_->registerCommand(definition.name, definition, CommandProvider_);
+        unsetCommandId_ = chatAPI_->registerCommand(definition.name, definition, CommandProvider_);
     }
     catch (const std::exception& ex)
     {
@@ -90,9 +91,9 @@ inline void NeoRAS::unegisterCommand()
         chatAPI_->unregisterCommand(helpCommandId_);
         chatAPI_->unregisterCommand(versionCommandId_);
         chatAPI_->unregisterCommand(assignCommandId_);
-        chatAPI_->unregisterCommand(assignGroupCommandId_);
+        chatAPI_->unregisterCommand(setupCommandId_);
         chatAPI_->unregisterCommand(unassignCommandId_);
-        chatAPI_->unregisterCommand(unassignGroupCommandId_);
+        chatAPI_->unregisterCommand(unsetCommandId_);
         chatAPI_->unregisterCommand(includeCommandId_);
         chatAPI_->unregisterCommand(excludeCommandId_);
         chatAPI_->unregisterCommand(resetCommandId_);
@@ -114,8 +115,8 @@ Chat::CommandResult NeoRASCommandProvider::Execute( const std::string &commandId
           ".ras version",
 		  ".ras assign <ICAO>",
 		  ".ras unassign <ICAO>",
-		  ".ras assign <ATC Position>",
-		  ".ras unassign <ATC Position>",
+		  ".ras setup <ATC Position>",
+		  ".ras unset",
           ".ras include <ICAO>",
 		  ".ras exclude <ICAO>"
             })

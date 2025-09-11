@@ -60,9 +60,9 @@ namespace ras {
         std::string helpCommandId_;
         std::string versionCommandId_;
         std::string assignCommandId_;
-        std::string assignGroupCommandId_;
+        std::string setupCommandId_;
         std::string unassignCommandId_;
-        std::string unassignGroupCommandId_;
+        std::string unsetCommandId_;
         std::string includeCommandId_;
         std::string excludeCommandId_;
         std::string resetCommandId_;

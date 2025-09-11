@@ -13,8 +13,8 @@ PLUGIN_USAGE_INSTRUCTIONS
 - `.ras version` : Display the plugin version.
 - `.ras assign <ICAO>` : Assigns runways for the specified airport ICAO code.
 - `.ras unaassign <ICAO>` : Unassigns runways for the specified airport ICAO code.
-- `.ras assign <ATCPOS>` : Assign runways for all active airports of ATC position.
-- `.ras unaassign` : Unassign all runways.
+- `.ras setup <ATCPOS>` : Assign runways for all active airports of ATC position, ATCPOS fetched automatically if connected.
+- `.ras unset` : Unassign all runways.
 - `.ras include <ICAO>` : include airport in the automatic runway assignment.
 - `.ras exclude <ICAO>` : exclude airport from the automatic runway assignment.
 - `.ras reset` : reset all runway assignments.
